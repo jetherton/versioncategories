@@ -27,7 +27,51 @@ class versioncategories {
 	public function add()
 	{
 		Event::add('ushahidi_action.report_categories_changing', array($this, '_save_data'));					
+		Event::add('ushahidi_action.report_categories_adding', array($this, '_add_cats'));			
+		Event::add('ushahidi_action.report_categories_removing', array($this, '_remove_cats'));			
 	}
+	
+	
+	/**
+	 * This function is called when we want to just tell
+	 * the plugin that old categories X,Y, and Z are being removed
+	 * to report A
+	 */ 
+	public function _remove_cats()
+	{
+		$data = Event::$data;
+		$incident_id = $data['id'];
+		$cats_to_remove = $data['categories'];
+		foreach($cats_to_remove as $cat)
+		{
+				$entry = ORM::factory('versioncategories');
+				$entry->category_id = $cat;
+				$entry->incident_id = $incident_id;
+				$entry->type = 0;
+				$entry->save();
+		}
+	}
+	
+	/**
+	 * This function is called when we want to just tell
+	 * the plugin that new categories X,Y, and Z are being added
+	 * to report A
+	 */ 
+	public function _add_cats()
+	{
+		$data = Event::$data;
+		$incident_id = $data['id'];
+		$cats_to_add = $data['categories'];
+		foreach($cats_to_add as $cat)
+		{
+				$entry = ORM::factory('versioncategories');
+				$entry->category_id = $cat;
+				$entry->incident_id = $incident_id;
+				$entry->type = 1;
+				$entry->save();
+		}
+	}
+	
 	
 	/**
 	 * This will save the changes to the categories
