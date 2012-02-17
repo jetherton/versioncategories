@@ -16,8 +16,11 @@ incidents
 == Installation ==
 1. Copy the entire /versioncategories/ directory into your /plugins/ directory.
 2. Around line 393 of /application/helpers/reports.php, before the previous
-categories are deleted add this event:
-Event::run('ushahidi_action.report_categories_changing', array('id'=>$incident->id, 'new_categories'=>$post->incident_category));
+categories are deleted add this definition and event:
+
+	$event_data = array('id'=>$incident->id, 'new_categories'=>$post->incident_category);
+	Event::run('ushahidi_action.report_categories_changing', $event_data);
+
 3. Activate the plugin.
 
 == Changelog ==

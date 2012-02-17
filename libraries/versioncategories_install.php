@@ -1,12 +1,12 @@
 <?php
 /**
- * File Upload - Install
+ * Version Categories - Install
  *
  * @author	   John Etherton
- * @package	   File Upload
+ * @package	   Version Categories
  */
 
-class Fileupload_Install {
+class Versioncategories_Install {
 
 	/**
 	 * Constructor to load the shared database library
@@ -23,15 +23,13 @@ class Fileupload_Install {
 	{
 		// Create the database tables.
 		// Also include table_prefix in name
-		$this->db->query('CREATE TABLE IF NOT EXISTS `'.Kohana::config('database.default.table_prefix').'fileupload` (
-				  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-				  `incident_id` int(11) DEFAULT NULL,
-				  `page_id` int(11) DEFAULT NULL,
-				  `association_type` tinyint(4) default NULL COMMENT \'1 - reports, 2 - pages\',
-				  `file_title` varchar(255) default NULL,
-				  `file_link` varchar(511) default NULL,
-				  `file_date` datetime default NULL,
-				  PRIMARY KEY (`id`)
+		$this->db->query('CREATE TABLE IF NOT EXISTS `'.Kohana::config('database.default.table_prefix').'versioncategories` (
+				  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+				  `incident_id` bigint(20) unsigned NOT NULL,
+				  `category_id` int(11) unsigned NOT NULL,
+				  `type` tinyint(4) default NULL COMMENT \'0 - removed, 1 - added\',				  
+				  `time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,				  				  
+				  PRIMARY KEY (`id`)				  
 				) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1');
 
 	}
@@ -41,7 +39,7 @@ class Fileupload_Install {
 	 */
 	public function uninstall()
 	{
-		// I worry that someone will upload lots of files, and then uninstall this not realizing that they've just destroyed all the meta
-		// data associated with thier files, so right now uninstalling this doesn't do anything.
+		// I worry that someone will have tons of data saved, then carelessly click "deactiviate" and blow the whole thing.
+		// So I make it harder than that.
 	}
 }
